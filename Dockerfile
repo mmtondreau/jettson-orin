@@ -14,7 +14,8 @@ ENV USE_NNPACK=0
 ENV USE_XNNPACK=0
 ENV USE_QNNPACK=0
 ENV USE_PYTORCH_QNNPACK=0
-ENV TORCH_CUDA_ARCH_LIST="8.7"
+# Tegra Orin
+ENV TORCH_CUDA_ARCH_LIST="8.7" 
 ENV USE_NCCL=0
 ENV USE_SYSTEM_NCCL=0
 ENV USE_OPENCV=0
@@ -75,10 +76,20 @@ RUN conda install -n torch -c anaconda libpng
 RUN conda install -n torch -c conda-forge libjpeg-turbo
 
 # torchaudio doesnt compile -- cant find cuda.h
+WORKDIR /src
+RUN git clone --branch ${PYTORCH_AUDIO_VERSION} https://github.com/pytorch/audio
+WORKDIR /src/audio
+RUN conda run -n torch python setup.py install 
+
+ARG PYTORCH_TEXT_VERSION=v0.16.0
+
+# RUN conda install -n torch matplotlib
+# torchtext  
 #WORKDIR /src
-#RUN git clone --branch ${PYTORCH_AUDIO_VERSION} https://github.com/pytorch/audio
-#WORKDIR /src/audio
-#RUN python setup.py develop
+#RUN git clone --branch ${PYTORCH_TEXT_VERSION} https://github.com/pytorch/text 
+#WORKDIR /src/text
+#RUN git submodule update --init --recursive
+#RUN conda run -n torch python setup.py clean install
 
 ARG JUPYTER_HOME=/root/.jupyter
 ENV JUPYTER_HOME=$JUPYTER_HOME
@@ -89,6 +100,4 @@ COPY jupyter_server_config.json $JUPYTER_HOME/jupyter_notebook_config.json
 COPY fullchain.pem /etc/ssl/certs/tonberry.pem
 COPY privkey.pem /etc/ssl/private/tonberry.pem
 WORKDIR /root/workspace
-#CMD conda run -n torch jupyter lab --allow-root
-CMD conda run -n torch python test.py 
-#CMD bash
+ENTRYPOINT ["conda", "run", "-n", "torch", "jupyter", "lab", "--allow-root"]
