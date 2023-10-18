@@ -83,7 +83,7 @@ RUN conda run -n torch python setup.py install
 
 ARG PYTORCH_TEXT_VERSION=v0.16.0
 
-# RUN conda install -n torch matplotlib
+ RUN conda run -n torch pip install matplotlib==3.7.3
 # torchtext  
 #WORKDIR /src
 #RUN git clone --branch ${PYTORCH_TEXT_VERSION} https://github.com/pytorch/text 
