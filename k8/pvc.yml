@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: torch-claim
+  namespace: torch
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteMany
+  volumeName: "torch-volume"
+  resources:
+    requests:
+      storage: 80Gi
+  selector:
+    matchLabels:
+      app: torch

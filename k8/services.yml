@@ -1,0 +1,16 @@
+apiVersion: v1                                                                                                       
+kind: Service                                                                                                        
+metadata:                                                                                                            
+  name: torch                                                                                                      
+  namespace: torch 
+  labels:                                                                                                            
+    app.kubernetes.io/name: torch                                                                                  
+    app.kubernetes.io/instance: torch                                                                              
+spec:                                                                                                                
+  type: NodePort 
+  ports:                                                                                                             
+    - port: 8888                                                                                                     
+      targetPort: 8888                                                                                               
+      nodePort: 30000
+  selector:                                                                                                          
+    app: torch                                                                                  

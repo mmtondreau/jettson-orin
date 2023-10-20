@@ -1,0 +1,12 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: torch-lab-ingress
+spec:
+  host: jetson00.tonberry.org 
+  tls:
+    secret: tonberrysecret-tls 
+  routes:
+  - path: /
+    route: torch:8888  # Service name and port
+

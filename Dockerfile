@@ -52,7 +52,7 @@ RUN conda init bash
 RUN conda install -n torch cmake ninja 
 
 # Install pytorch
-RUN python -m pip install numpy setuptools
+#RUN python -m pip install numpy setuptools
 RUN git clone --recursive --branch ${PYTORCH_VERSION} https://github.com/pytorch/pytorch
 WORKDIR  /src/pytorch
 RUN conda run -n torch pip install -r requirements.txt
@@ -97,7 +97,7 @@ COPY jupyter_notebook_config.py $JUPYTER_HOME/jupyter_notebook_config.py
 COPY jupyter_lab_config.py $JUPYTER_HOME/jupyter_lab_config.py 
 COPY jupyter_server_config.json $JUPYTER_HOME/jupyter_server_config.json 
 COPY jupyter_server_config.json $JUPYTER_HOME/jupyter_notebook_config.json 
-COPY fullchain.pem /etc/ssl/certs/tonberry.pem
-COPY privkey.pem /etc/ssl/private/tonberry.pem
+#COPY fullchain.pem /etc/ssl/certs/tonberry.pem
+#COPY privkey.pem /etc/ssl/private/tonberry.pem
 WORKDIR /root/workspace
-ENTRYPOINT ["conda", "run", "-n", "torch", "jupyter", "lab", "--allow-root"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "torch", "jupyter", "lab", "--allow-root"]
