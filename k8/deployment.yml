@@ -18,17 +18,37 @@ spec:
     spec:
       nodeSelector:
         gpu: "true"
+      #hostIPC: true
+      #hostNetwork: true
       containers:
       - image: registry.tonberry.org/tonberry/torch:1.0
         name: torch 
-        env:
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            memory: "32Gi"
+            cpu: "6"
+          requests:
+            nvidia.com/gpu: 1
+            memory: "16Gi"
+            cpu: "4"
         ports:
         - containerPort: 8888 
           name: jupyter 
-          #volumeMounts:
-          #- name: torch-persistent-storage
-          #mountPath: /var/torch/
-          #volumes:
-          #- name: torch-persistent-storage
-          # persistentVolumeClaim:
-          #claimName: torch-claim
+        volumeMounts:
+        - name: torch-persistent-storage
+          mountPath: /var/torch/
+        - name: dshm
+          mountPath: /dev/shm
+      volumes:
+      - name: torch-persistent-storage
+        persistentVolumeClaim:
+          claimName: torch-claim
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 8Gi
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule

@@ -1079,6 +1079,6 @@ c = get_config()  #noqa
 # c.ServerApp.websocket_url = ''
 c.NotebookApp.allow_origin = '*'
 c.NotebookApp.ip = '0.0.0.0'
-c.ServerApp.root_dir = os.path.join(os.environ['HOME'], 'workspace')
+c.ServerApp.root_dir = '/var/torch' 
 #c.NotebookApp.keyfile = '/etc/ssl/private/tonberry.pem'
 #c.NotebookApp.certfile = '/etc/ssl/certs/tonberry.pem'
